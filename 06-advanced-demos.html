@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Animation Demos - Interactive Lab</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #10243e;
+        --muted: #51627c;
+        --accent: #2f6df6;
+        --border: #dbe2ef;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --purple: #9333ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .nav {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .nav a {
+        color: var(--accent);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.current {
+        background: var(--accent);
+        color: white;
+      }
+
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .demo-card {
+        background: var(--panel);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .demo-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(47, 109, 246, 0.15);
+      }
+
+      .demo-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+
+      .demo-description {
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .demo-area {
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fafbfc;
+        margin: 1rem 0;
+        position: relative;
+      }
+
+      .demo-element {
+        width: 80px;
+        height: 80px;
+        background: var(--accent);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
+      }
+
+      .code-block {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: "Monaco", "Menlo", "Courier", monospace;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        overflow-x: auto;
+        margin-top: 1rem;
+      }
+
+      /* Advanced Animations */
+
+      /* Particle System */
+      .particle-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+
+      @keyframes particleFloat {
+        0% {
+          transform: translate(0, 0) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50px, -100px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .particle:nth-child(1) {
+        left: 40%;
+        animation: particleFloat 2s ease-out infinite 0.1s;
+      }
+      .particle:nth-child(2) {
+        left: 50%;
+        animation: particleFloat 2s ease-out infinite 0.3s;
+      }
+      .particle:nth-child(3) {
+        left: 60%;
+        animation: particleFloat 2s ease-out infinite 0.5s;
+      }
+      .particle:nth-child(4) {
+        left: 45%;
+        animation: particleFloat 2s ease-out infinite 0.7s;
+      }
+      .particle:nth-child(5) {
+        left: 55%;
+        animation: particleFloat 2s ease-out infinite 0.9s;
+      }
+
+      /* Loading Spinner Complex */
+      .complex-spinner {
+        position: relative;
+        width: 60px;
+        height: 60px;
+      }
+
+      .spinner-ring {
+        position: absolute;
+        border: 3px solid transparent;
+        border-radius: 50%;
+      }
+
+      .ring-1 {
+        width: 60px;
+        height: 60px;
+        border-top-color: var(--accent);
+        animation: spin 1s linear infinite;
+      }
+
+      .ring-2 {
+        width: 45px;
+        height: 45px;
+        top: 7.5px;
+        left: 7.5px;
+        border-right-color: var(--success);
+        animation: spin 1.5s linear infinite reverse;
+      }
+
+      .ring-3 {
+        width: 30px;
+        height: 30px;
+        top: 15px;
+        left: 15px;
+        border-bottom-color: var(--warning);
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Morphing Shape */
+      @keyframes morphShape {
+        0% {
+          border-radius: 8px;
+          background: var(--accent);
+          transform: rotate(0deg) scale(1);
+        }
+        25% {
+          border-radius: 50%;
+          background: var(--success);
+          transform: rotate(90deg) scale(1.2);
+        }
+        50% {
+          border-radius: 0;
+          background: var(--warning);
+          transform: rotate(180deg) scale(0.8);
+        }
+        75% {
+          border-radius: 25px;
+          background: var(--danger);
+          transform: rotate(270deg) scale(1.1);
+        }
+        100% {
+          border-radius: 8px;
+          background: var(--accent);
+          transform: rotate(360deg) scale(1);
+        }
+      }
+
+      .morphing-shape {
+        animation: morphShape 3s ease-in-out infinite;
+      }
+
+      /* Text Wave Effect */
+      .wave-text {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .wave-text span {
+        display: inline-block;
+        animation: textWave 2s ease-in-out infinite;
+      }
+
+      @keyframes textWave {
+        0%,
+        40%,
+        100% {
+          transform: translateY(0);
+        }
+        20% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .wave-text span:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .wave-text span:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .wave-text span:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .wave-text span:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .wave-text span:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+
+      /* Elastic Bounce */
+      @keyframes elasticBounce {
+        0% {
+          transform: scale(1, 1);
+        }
+        10% {
+          transform: scale(1.1, 0.9);
+        }
+        20% {
+          transform: scale(0.9, 1.1);
+        }
+        30% {
+          transform: scale(1.05, 0.95);
+        }
+        40% {
+          transform: scale(0.95, 1.05);
+        }
+        50% {
+          transform: scale(1.02, 0.98);
+        }
+        60% {
+          transform: scale(0.98, 1.02);
+        }
+        70% {
+          transform: scale(1.01, 0.99);
+        }
+        80% {
+          transform: scale(0.99, 1.01);
+        }
+        90% {
+          transform: scale(1.005, 0.995);
+        }
+        100% {
+          transform: scale(1, 1);
+        }
+      }
+
+      .elastic-bounce {
+        animation: elasticBounce 1.5s ease-out infinite;
+      }
+
+      /* Card Flip */
+      .flip-card {
+        width: 120px;
+        height: 80px;
+        perspective: 1000px;
+      }
+
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        animation: autoFlip 3s ease-in-out infinite;
+      }
+
+      @keyframes autoFlip {
+        0%,
+        30% {
+          transform: rotateY(0deg);
+        }
+        50%,
+        80% {
+          transform: rotateY(180deg);
+        }
+        100% {
+          transform: rotateY(360deg);
+        }
+      }
+
+      .flip-card-front,
+      .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+      }
+
+      .flip-card-front {
+        background: var(--accent);
+      }
+
+      .flip-card-back {
+        background: var(--success);
+        transform: rotateY(180deg);
+      }
+
+      /* Floating Animation */
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      /* Pulse Ring */
+      .pulse-container {
+        position: relative;
+        width: 60px;
+        height: 60px;
+      }
+
+      .pulse-ring {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 3px solid var(--accent);
+        border-radius: 50%;
+        animation: pulseRing 2s ease-out infinite;
+      }
+
+      .pulse-ring:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+
+      .pulse-ring:nth-child(3) {
+        animation-delay: 1s;
+      }
+
+      @keyframes pulseRing {
+        0% {
+          transform: scale(0.8);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(2.5);
+          opacity: 0;
+        }
+      }
+
+      .pulse-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+
+      /* Matrix Rain Effect */
+      .matrix-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        border-radius: 8px;
+      }
+
+      .matrix-column {
+        position: absolute;
+        top: -100%;
+        color: #00ff41;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        animation: matrixFall 3s linear infinite;
+      }
+
+      @keyframes matrixFall {
+        to {
+          top: 100%;
+        }
+      }
+
+      .matrix-column:nth-child(1) {
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .matrix-column:nth-child(2) {
+        left: 25%;
+        animation-delay: 0.5s;
+      }
+      .matrix-column:nth-child(3) {
+        left: 45%;
+        animation-delay: 1s;
+      }
+      .matrix-column:nth-child(4) {
+        left: 60%;
+        animation-delay: 1.5s;
+      }
+      .matrix-column:nth-child(5) {
+        left: 80%;
+        animation-delay: 2s;
+      }
+
+      .showcase-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .performance-tip {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .performance-tip strong {
+        color: var(--warning);
+      }
+
+      @media (max-width: 768px) {
+        .demo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <ul>
+          <li>
+            <a href="01-transitions-basics.html">1. Transitions Basics</a>
+          </li>
+          <li>
+            <a href="02-transition-properties.html">2. Transition Properties</a>
+          </li>
+          <li><a href="03-animations-basics.html">3. Animation Basics</a></li>
+          <li>
+            <a href="04-keyframes-examples.html">4. Keyframes Examples</a>
+          </li>
+          <li><a href="05-square-movement.html">5. Square Movement Demo</a></li>
+          <li>
+            <a href="06-advanced-demos.html" class="current"
+              >6. Advanced Demos</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <section class="section">
+        <h1>Advanced Animation Demos</h1>
+        <p>
+          Explore complex animations that combine multiple techniques, create
+          visual effects, and push the boundaries of CSS animation capabilities.
+        </p>
+
+        <div class="performance-tip">
+          <strong>⚡ Performance Tip:</strong> These advanced animations may
+          impact performance on slower devices. For production use, consider
+          using <code>will-change</code> property and
+          <code>transform3d()</code> to enable hardware acceleration.
+        </div>
+
+        <h2>Complex Visual Effects</h2>
+        <div class="demo-grid">
+          <div class="demo-card">
+            <div class="demo-title">Particle System</div>
+            <div class="demo-description">
+              Animated particles floating upward with staggered timing
+            </div>
+            <div class="demo-area">
+              <div class="particle-container">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+              </div>
+            </div>
+            <div class="code-block">
+              @keyframes particleFloat { 0% { transform: translate(0, 0)
+              scale(0); opacity: 0; } 10% { opacity: 1; transform: scale(1); }
+              90% { opacity: 1; } 100% { transform: translate(-50px, -100px)
+              scale(0); opacity: 0; } } .particle:nth-child(1) { animation:
+              particleFloat 2s ease-out infinite 0.1s; }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Multi-Ring Spinner</div>
+            <div class="demo-description">
+              Concentric spinning rings with different speeds and directions
+            </div>
+            <div class="demo-area">
+              <div class="complex-spinner">
+                <div class="spinner-ring ring-1"></div>
+                <div class="spinner-ring ring-2"></div>
+                <div class="spinner-ring ring-3"></div>
+              </div>
+            </div>
+            <div class="code-block">
+              .ring-1 { border-top-color: #2f6df6; animation: spin 1s linear
+              infinite; } .ring-2 { border-right-color: #22c55e; animation: spin
+              1.5s linear infinite reverse; } .ring-3 { border-bottom-color:
+              #f59e0b; animation: spin 2s linear infinite; }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Morphing Shape</div>
+            <div class="demo-description">
+              Complex shape transformation with color and rotation changes
+            </div>
+            <div class="demo-area">
+              <div class="demo-element morphing-shape">MORPH</div>
+            </div>
+            <div class="code-block">
+              @keyframes morphShape { 0% { border-radius: 8px; background:
+              #2f6df6; transform: rotate(0deg) scale(1); } 25% { border-radius:
+              50%; background: #22c55e; transform: rotate(90deg) scale(1.2); }
+              50% { border-radius: 0; background: #f59e0b; transform:
+              rotate(180deg) scale(0.8); } /* ... continues ... */ }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Text Wave Effect</div>
+            <div class="demo-description">
+              Letters animated individually to create a wave motion
+            </div>
+            <div class="demo-area">
+              <div class="wave-text">
+                <span>W</span><span>A</span><span>V</span><span>E</span
+                ><span>S</span>
+              </div>
+            </div>
+            <div class="code-block">
+              @keyframes textWave { 0%, 40%, 100% { transform: translateY(0); }
+              20% { transform: translateY(-20px); } } .wave-text
+              span:nth-child(1) { animation-delay: 0s; } .wave-text
+              span:nth-child(2) { animation-delay: 0.1s; } .wave-text
+              span:nth-child(3) { animation-delay: 0.2s; } /* Stagger delays for
+              wave effect */
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Elastic Bounce</div>
+            <div class="demo-description">
+              Realistic elastic deformation effect
+            </div>
+            <div class="demo-area">
+              <div class="demo-element elastic-bounce">ELASTIC</div>
+            </div>
+            <div class="code-block">
+              @keyframes elasticBounce { 0% { transform: scale(1, 1); } 10% {
+              transform: scale(1.1, 0.9); } 20% { transform: scale(0.9, 1.1); }
+              30% { transform: scale(1.05, 0.95); } /* Fine-tuned elastic steps
+              */ 100% { transform: scale(1, 1); } }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">3D Card Flip</div>
+            <div class="demo-description">
+              Automatic 3D card flipping with perspective
+            </div>
+            <div class="demo-area">
+              <div class="flip-card">
+                <div class="flip-card-inner">
+                  <div class="flip-card-front">FRONT</div>
+                  <div class="flip-card-back">BACK</div>
+                </div>
+              </div>
+            </div>
+            <div class="code-block">
+              .flip-card { perspective: 1000px; } .flip-card-inner {
+              transform-style: preserve-3d; animation: autoFlip 3s ease-in-out
+              infinite; } @keyframes autoFlip { 0%, 30% { transform:
+              rotateY(0deg); } 50%, 80% { transform: rotateY(180deg); } 100% {
+              transform: rotateY(360deg); } }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Floating Effect</div>
+            <div class="demo-description">
+              Gentle up-and-down floating motion
+            </div>
+            <div class="demo-area">
+              <div class="demo-element floating">FLOAT</div>
+            </div>
+            <div class="code-block">
+              @keyframes floating { 0% { transform: translateY(0px); } 50% {
+              transform: translateY(-20px); } 100% { transform: translateY(0px);
+              } } .floating { animation: floating 3s ease-in-out infinite; }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Pulse Rings</div>
+            <div class="demo-description">
+              Expanding rings with fade-out effect
+            </div>
+            <div class="demo-area">
+              <div class="pulse-container">
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-center"></div>
+              </div>
+            </div>
+            <div class="code-block">
+              .pulse-ring { animation: pulseRing 2s ease-out infinite; }
+              .pulse-ring:nth-child(2) { animation-delay: 0.5s; } @keyframes
+              pulseRing { 0% { transform: scale(0.8); opacity: 1; } 100% {
+              transform: scale(2.5); opacity: 0; } }
+            </div>
+          </div>
+
+          <div class="demo-card">
+            <div class="demo-title">Matrix Rain</div>
+            <div class="demo-description">
+              Falling text columns for Matrix-style effect
+            </div>
+            <div class="demo-area">
+              <div class="matrix-container">
+                <div class="matrix-column">1<br />0<br />1<br />0<br />1</div>
+                <div class="matrix-column">0<br />1<br />1<br />0<br />1</div>
+                <div class="matrix-column">1<br />1<br />0<br />1<br />0</div>
+                <div class="matrix-column">0<br />0<br />1<br />1<br />0</div>
+                <div class="matrix-column">1<br />0<br />0<br />1<br />1</div>
+              </div>
+            </div>
+            <div class="code-block">
+              .matrix-column { position: absolute; top: -100%; color: #00ff41;
+              animation: matrixFall 3s linear infinite; } @keyframes matrixFall
+              { to { top: 100%; } } /* Staggered delays for each column */
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>🎨 Animation Design Principles</h2>
+
+        <h3>1. Timing and Easing</h3>
+        <ul>
+          <li>
+            <strong>Natural Movement:</strong> Use ease-out for objects coming
+            to rest, ease-in for starting motion
+          </li>
+          <li>
+            <strong>Attention-Grabbing:</strong> Use bounce or elastic easing
+            for interactive feedback
+          </li>
+          <li>
+            <strong>Subtle Effects:</strong> Use linear for continuous loops,
+            ease-in-out for smooth cycles
+          </li>
+        </ul>
+
+        <h3>2. Performance Optimization</h3>
+        <div
+          class="code-block"
+          style="
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+          "
+        >
+          /* Best Performance (GPU-accelerated) */ .optimized { will-change:
+          transform; transform: translateZ(0); /* Force hardware acceleration */
+          } /* Animate these properties for best performance */ transform:
+          translateX(), translateY(), translateZ() transform: scale(), rotate(),
+          skew() opacity filter: blur(), brightness(), etc. /* Avoid animating
+          these (cause repaints/reflows) */ width, height, top, left, margin,
+          padding border-width, font-size, line-height
+        </div>
+
+        <h3>3. Accessibility Considerations</h3>
+        <div
+          class="code-block"
+          style="
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+          "
+        >
+          /* Respect user's motion preferences */ @media
+          (prefers-reduced-motion: reduce) { *, *::before, *::after {
+          animation-duration: 0.01ms !important; animation-iteration-count: 1
+          !important; transition-duration: 0.01ms !important; } }
+        </div>
+
+        <h3>4. Layer Management</h3>
+        <ul>
+          <li>
+            <strong>z-index:</strong> Manage stacking order for overlapping
+            animations
+          </li>
+          <li>
+            <strong>transform3d():</strong> Create new composite layers for
+            complex animations
+          </li>
+          <li>
+            <strong>isolation:</strong> Use CSS isolation to prevent animation
+            bleed-through
+          </li>
+        </ul>
+
+        <h3>5. Animation Orchestration</h3>
+        <div
+          class="code-block"
+          style="
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+          "
+        >
+          /* Coordinated timing for multiple elements */ .element-1 {
+          animation-delay: 0s; } .element-2 { animation-delay: 0.1s; }
+          .element-3 { animation-delay: 0.2s; } /* Use CSS custom properties for
+          dynamic control */ .animated { --duration: 2s; --delay: 0s; animation:
+          myAnimation var(--duration) ease var(--delay) infinite; }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>🚀 Next Steps</h2>
+        <p>
+          Now that you've explored CSS animations from basics to advanced
+          techniques, here are some ways to continue learning:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Experiment:</strong> Modify the examples in these pages -
+            change timings, combine animations, create variations
+          </li>
+          <li>
+            <strong>Build Projects:</strong> Create loading spinners, hover
+            effects, page transitions, and micro-interactions
+          </li>
+          <li>
+            <strong>Study Motion Design:</strong> Learn from motion design
+            principles used in UI/UX
+          </li>
+          <li>
+            <strong>Performance Testing:</strong> Use browser dev tools to
+            measure animation performance
+          </li>
+          <li>
+            <strong>Frameworks:</strong> Explore animation libraries like Framer
+            Motion, GSAP, or Lottie for more complex needs
+          </li>
+        </ul>
+
+        <div class="performance-tip">
+          <strong>💡 Pro Tips:</strong>
+          <ul>
+            <li>Start simple and gradually add complexity</li>
+            <li>Test on mobile devices for performance</li>
+            <li>Use animation sparingly - less is often more</li>
+            <li>
+              Consider the purpose: does this animation improve user experience?
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

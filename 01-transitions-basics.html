@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Transitions Basics - Interactive Lab</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #10243e;
+        --muted: #51627c;
+        --accent: #2f6df6;
+        --border: #dbe2ef;
+        --success: #22c55e;
+        --warning: #f59e0b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .nav {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .nav a {
+        color: var(--accent);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.current {
+        background: var(--accent);
+        color: white;
+      }
+
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
+      }
+
+      .example-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .code-block {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        position: relative;
+      }
+
+      .code-block pre {
+        margin: 0;
+        font-family: "Monaco", "Menlo", "Courier", monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .demo-area {
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fafbfc;
+      }
+
+      .property-example {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .property-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+
+      .demo-box {
+        width: 100px;
+        height: 100px;
+        background: var(--accent);
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-block;
+        margin: 1rem;
+      }
+
+      /* Transition Property Examples */
+      .property-demo {
+        transition-property: background-color;
+        transition-duration: 0.5s;
+      }
+
+      .property-demo:hover {
+        background-color: var(--success);
+      }
+
+      .duration-demo {
+        transition: all 0.1s ease;
+      }
+
+      .duration-demo:hover {
+        transform: scale(1.1);
+        background-color: var(--warning);
+      }
+
+      .timing-demo {
+        transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .timing-demo:hover {
+        transform: rotate(360deg) scale(1.2);
+      }
+
+      .delay-demo {
+        transition: all 0.3s ease;
+        transition-delay: 0.5s;
+      }
+
+      .delay-demo:hover {
+        transform: translateY(-20px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .multiple-demo {
+        transition:
+          background-color 0.3s ease,
+          transform 0.3s ease 0.1s,
+          border-radius 0.3s ease 0.2s;
+      }
+
+      .multiple-demo:hover {
+        background-color: #9333ea;
+        transform: scale(1.1);
+        border-radius: 50%;
+      }
+
+      .editable {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: monospace;
+        min-height: 120px;
+        resize: vertical;
+        width: 100%;
+      }
+
+      .live-demo {
+        padding: 2rem;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        background: white;
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .example-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <ul>
+          <li>
+            <a href="01-transitions-basics.html" class="current"
+              >1. Transitions Basics</a
+            >
+          </li>
+          <li>
+            <a href="02-transition-properties.html">2. Transition Properties</a>
+          </li>
+          <li><a href="03-animations-basics.html">3. Animation Basics</a></li>
+          <li>
+            <a href="04-keyframes-examples.html">4. Keyframes Examples</a>
+          </li>
+          <li><a href="05-square-movement.html">5. Square Movement Demo</a></li>
+          <li><a href="06-advanced-demos.html">6. Advanced Demos</a></li>
+        </ul>
+      </nav>
+
+      <section class="section">
+        <h1>CSS Transitions Basics</h1>
+        <p>
+          CSS transitions allow you to smoothly animate changes between
+          different states of an element. They're perfect for hover effects,
+          focus states, and simple interactions.
+        </p>
+
+        <h2>What Are Transitions?</h2>
+        <p>
+          Transitions animate the change from one CSS property value to another.
+          Instead of an instant change, you get a smooth animation over a
+          specified duration.
+        </p>
+
+        <div class="property-example">
+          <div class="property-title">Basic Transition Syntax</div>
+          <div class="code-block">
+            <pre>
+/* Basic syntax */
+.element {
+    transition: property duration timing-function delay;
+}
+
+/* Examples */
+.box { transition: background-color 0.3s ease; }
+.box { transition: all 0.5s ease-in-out; }
+.box { transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }</pre
+            >
+          </div>
+        </div>
+
+        <h2>Interactive Examples</h2>
+
+        <div class="property-example">
+          <div class="property-title">
+            1. transition-property: Specific Property
+          </div>
+          <p>
+            This example only animates the background-color, other properties
+            change instantly.
+          </p>
+          <div class="demo-area">
+            <div class="demo-box property-demo">Hover me!</div>
+          </div>
+          <div class="code-block">
+            <pre>
+.property-demo {
+    transition-property: background-color;
+    transition-duration: 0.5s;
+}
+
+.property-demo:hover {
+    background-color: #22c55e;
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="property-example">
+          <div class="property-title">2. Quick Duration (0.1s)</div>
+          <p>Very fast transitions create snappy, responsive interactions.</p>
+          <div class="demo-area">
+            <div class="demo-box duration-demo">Quick!</div>
+          </div>
+          <div class="code-block">
+            <pre>
+.duration-demo {
+    transition: all 0.1s ease;
+}
+
+.duration-demo:hover {
+    transform: scale(1.1);
+    background-color: #f59e0b;
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="property-example">
+          <div class="property-title">3. Custom Timing Function</div>
+          <p>Bounce effect using cubic-bezier timing function.</p>
+          <div class="demo-area">
+            <div class="demo-box timing-demo">Bounce!</div>
+          </div>
+          <div class="code-block">
+            <pre>
+.timing-demo {
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.timing-demo:hover {
+    transform: rotate(360deg) scale(1.2);
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="property-example">
+          <div class="property-title">4. Transition Delay</div>
+          <p>Wait 0.5 seconds before starting the animation.</p>
+          <div class="demo-area">
+            <div class="demo-box delay-demo">Wait for it...</div>
+          </div>
+          <div class="code-block">
+            <pre>
+.delay-demo {
+    transition: all 0.3s ease;
+    transition-delay: 0.5s;
+}
+
+.delay-demo:hover {
+    transform: translateY(-20px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="property-example">
+          <div class="property-title">5. Multiple Transitions</div>
+          <p>Different properties with different timing and delays.</p>
+          <div class="demo-area">
+            <div class="demo-box multiple-demo">Complex!</div>
+          </div>
+          <div class="code-block">
+            <pre>
+.multiple-demo {
+    transition: 
+        background-color 0.3s ease,
+        transform 0.3s ease 0.1s,
+        border-radius 0.3s ease 0.2s;
+}
+
+.multiple-demo:hover {
+    background-color: #9333ea;
+    transform: scale(1.1);
+    border-radius: 50%;
+}</pre
+            >
+          </div>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <p>Edit the CSS below and see the live result:</p>
+
+        <div class="example-grid">
+          <div>
+            <h3>CSS Code (Editable)</h3>
+            <textarea
+              class="editable"
+              id="custom-css"
+              placeholder="Enter your CSS here..."
+            >
+.my-box {
+    width: 100px;
+    height: 100px;
+    background-color: #2f6df6;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;
+}
+
+.my-box:hover {
+    background-color: #22c55e;
+    transform: scale(1.2) rotate(45deg);
+}</textarea
+            >
+          </div>
+          <div>
+            <h3>Live Preview</h3>
+            <div class="live-demo">
+              <div class="my-box" id="live-box">Hover me!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Live CSS editing
+      const cssTextarea = document.getElementById("custom-css");
+      const liveBox = document.getElementById("live-box");
+      let styleElement = document.createElement("style");
+      document.head.appendChild(styleElement);
+
+      function updateCSS() {
+        styleElement.textContent = cssTextarea.value;
+      }
+
+      cssTextarea.addEventListener("input", updateCSS);
+      // Initialize with default styles
+      updateCSS();
+    </script>
+  </body>
+</html>

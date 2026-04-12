@@ -1,53 +1,462 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CSS Transitions & Animations Lab</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f5f7fb;
-      --panel: #ffffff;
-      --ink: #10243e;
-      --muted: #51627c;
-      --accent: #2f6df6;
-      --border: #dbe2ef;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Transitions & Animations - Complete Interactive Tutorial</title>
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --ink: #10243e;
+            --muted: #51627c;
+            --accent: #2f6df6;
+            --border: #dbe2ef;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #9333ea;
+        }
 
-    * { box-sizing: border-box; }
+        * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.55;
-    }
+        body {
+            margin: 0;
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+        }
 
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1rem 3rem;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
 
-    h1, h2, h3 { line-height: 1.25; margin-top: 0; }
+        .hero {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+        }
 
-    .intro,
-    .property-grid,
-    .playground {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1rem;
-      box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
-      margin-bottom: 1rem;
-    }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            font-weight: 800;
+        }
 
-    .property-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        .hero p {
+            font-size: 1.2rem;
+            margin: 0 0 2rem 0;
+            opacity: 0.9;
+        }
+
+        .hero-demo {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 12px;
+            margin: 1rem;
+            animation: heroAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes heroAnimation {
+            0% { transform: rotate(0deg) scale(1); border-radius: 12px; }
+            25% { transform: rotate(90deg) scale(1.1); border-radius: 50%; }
+            50% { transform: rotate(180deg) scale(0.9); border-radius: 0; }
+            75% { transform: rotate(270deg) scale(1.1); border-radius: 50%; }
+            100% { transform: rotate(360deg) scale(1); border-radius: 12px; }
+        }
+
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .page-card {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(47, 109, 246, 0.15);
+            border-color: var(--accent);
+        }
+
+        .page-number {
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            color: var(--accent);
+        }
+
+        .page-description {
+            color: var(--muted);
+            margin: 0 0 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .page-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .page-topics li {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin: 0.3rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .page-topics li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .special-card {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+        }
+
+        .special-card .page-number {
+            background: var(--warning);
+        }
+
+        .special-card .page-title {
+            color: var(--warning);
+        }
+
+        .quick-start {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quick-start h2 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+
+        .demo-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            background: #f8faff;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 2px dashed var(--border);
+        }
+
+        .demo-box {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin: 0.5rem;
+        }
+
+        .preview-transition {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .preview-transition:hover {
+            transform: scale(1.2) rotate(15deg);
+            background: var(--success);
+        }
+
+        .preview-animation {
+            animation: previewPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes previewPulse {
+            0%, 100% { transform: scale(1); background-color: var(--accent); }
+            50% { transform: scale(1.2); background-color: var(--purple); }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--accent);
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .page-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <h1>CSS Transitions & Animations</h1>
+            <p>Complete Interactive Tutorial with Live Examples</p>
+            <div class="hero-demo"></div>
+            <div class="hero-demo" style="animation-delay: 0.5s;"></div>
+            <div class="hero-demo" style="animation-delay: 1s;"></div>
+        </section>
+
+        <section class="quick-start">
+            <h2>🚀 Quick Start Preview</h2>
+            <p>Get a taste of what you'll learn! Try hovering over the transition demo and watch the animation loop:</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h4>Transitions (Hover me!)</h4>
+                    <div class="demo-preview">
+                        <div class="demo-box preview-transition">HOVER</div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--muted);">Smooth changes triggered by user interaction</p>
+                </div>
+                
+                <div>
+                    <h4>Animations (Auto-playing)</h4>
+                    <div class="demo-preview">
+                        <div class="demo-box preview-animation">AUTO</div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--muted);">Complex motions that run automatically</p>
+                </div>
+            </div>
+        </section>
+
+        <h2 style="text-align: center; color: var(--accent); font-size: 2rem; margin: 3rem 0 2rem 0;">📚 Complete Tutorial Pages</h2>
+        
+        <div class="page-grid">
+            <a href="01-transitions-basics.html" class="page-card">
+                <div class="page-number">1</div>
+                <h3 class="page-title">Transitions Basics</h3>
+                <p class="page-description">Learn the fundamentals of CSS transitions with interactive examples you can edit and experiment with.</p>
+                <ul class="page-topics">
+                    <li>Basic transition syntax and properties</li>
+                    <li>Live CSS editor with instant preview</li>
+                    <li>Hover effects and simple interactions</li>
+                    <li>Multiple transition examples</li>
+                </ul>
+            </a>
+
+            <a href="02-transition-properties.html" class="page-card">
+                <div class="page-number">2</div>
+                <h3 class="page-title">Transition Properties</h3>
+                <p class="page-description">Deep dive into each transition property with comparison examples and an interactive builder tool.</p>
+                <ul class="page-topics">
+                    <li>transition-duration comparison (0.1s to 2s)</li>
+                    <li>Timing functions (ease, linear, bounce, etc.)</li>
+                    <li>Property-specific transitions</li>
+                    <li>Interactive transition builder with sliders</li>
+                </ul>
+            </a>
+
+            <a href="03-animations-basics.html" class="page-card">
+                <div class="page-number">3</div>
+                <h3 class="page-title">Animation Basics</h3>
+                <p class="page-description">Introduction to CSS animations with @keyframes and fundamental animation properties.</p>
+                <ul class="page-topics">
+                    <li>@keyframes syntax and structure</li>
+                    <li>Animation vs Transition differences</li>
+                    <li>Duration, iteration, direction examples</li>
+                    <li>Custom animation builder tool</li>
+                </ul>
+            </a>
+
+            <a href="04-keyframes-examples.html" class="page-card">
+                <div class="page-number">4</div>
+                <h3 class="page-title">Keyframes Examples</h3>
+                <p class="page-description">Comprehensive library of keyframe patterns from simple 2-step to complex multi-step animations.</p>
+                <ul class="page-topics">
+                    <li>2-step animations (0% → 100%)</li>
+                    <li>3-step animations with midpoints</li>
+                    <li>4+ step complex sequences</li>
+                    <li>Keyframe best practices and optimization</li>
+                </ul>
+            </a>
+
+            <a href="05-square-movement.html" class="page-card special-card">
+                <div class="page-number">5</div>
+                <h3 class="page-title">Square Movement Demo</h3>
+                <p class="page-description">The special clockwise square movement you requested! Square inside square moving in a perfect cycle.</p>
+                <ul class="page-topics">
+                    <li>Top-left → Top-right → Bottom-right → Bottom-left</li>
+                    <li>Multiple movement variations</li>
+                    <li>Coordinate calculation explained</li>
+                    <li>Custom path editor with live preview</li>
+                </ul>
+            </a>
+
+            <a href="06-advanced-demos.html" class="page-card">
+                <div class="page-number">6</div>
+                <h3 class="page-title">Advanced Demos</h3>
+                <p class="page-description">Complex animations combining multiple techniques: particle systems, 3D effects, and performance optimization.</p>
+                <ul class="page-topics">
+                    <li>Particle systems and multi-element animations</li>
+                    <li>3D transformations and perspective</li>
+                    <li>Performance optimization techniques</li>
+                    <li>Real-world animation patterns</li>
+                </ul>
+            </a>
+        </div>
+
+        <section class="quick-start">
+            <h2>✨ What Makes This Tutorial Special</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h4 class="feature-title">Interactive Learning</h4>
+                    <p class="feature-description">Edit CSS code and see changes instantly. No setup required!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4 class="feature-title">Mobile Friendly</h4>
+                    <p class="feature-description">All examples work perfectly on mobile devices</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4 class="feature-title">Practical Examples</h4>
+                    <p class="feature-description">Real-world animations you can use in your projects</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4 class="feature-title">Performance Focus</h4>
+                    <p class="feature-description">Learn optimization techniques for smooth animations</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h4 class="feature-title">Customizable</h4>
+                    <p class="feature-description">Interactive builders let you create your own animations</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <h4 class="feature-title">Complete Guide</h4>
+                    <p class="feature-description">From absolute beginner to advanced techniques</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="text-align: center; background: var(--panel); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin: 2rem 0;">
+            <h2 style="color: var(--accent); margin-top: 0;">Ready to Start Learning?</h2>
+            <p style="font-size: 1.1rem; margin: 1rem 0 2rem 0;">Begin with the basics or jump to any section that interests you!</p>
+            <a href="01-transitions-basics.html" style="display: inline-block; background: var(--accent); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s ease; border: none;">
+                Start with Transitions Basics →
+            </a>
+        </section>
+    </div>
+
+    <script>
+        // Add some interactive flair to the landing page
+        document.querySelectorAll('.page-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Animate feature cards on scroll (simple version)
+        const observeElements = document.querySelectorAll('.feature-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        });
+
+        observeElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
     }
 
     .property-grid ul {

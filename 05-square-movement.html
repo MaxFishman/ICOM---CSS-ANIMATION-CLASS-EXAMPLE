@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Square Movement Demo - Interactive Lab</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #10243e;
+        --muted: #51627c;
+        --accent: #2f6df6;
+        --border: #dbe2ef;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --purple: #9333ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .nav {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .nav a {
+        color: var(--accent);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.current {
+        background: var(--accent);
+        color: white;
+      }
+
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
+      }
+
+      .demo-showcase {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .demo-container {
+        background: var(--panel);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+      }
+
+      .outer-square {
+        width: 300px;
+        height: 300px;
+        border: 3px solid var(--accent);
+        border-radius: 12px;
+        position: relative;
+        background: #f8faff;
+        margin: 2rem auto;
+      }
+
+      .inner-square {
+        width: 60px;
+        height: 60px;
+        background: var(--accent);
+        border-radius: 8px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
+        box-shadow: 0 4px 12px rgba(47, 109, 246, 0.3);
+      }
+
+      /* Main clockwise animation */
+      @keyframes clockwiseSquare {
+        0% {
+          top: 20px;
+          left: 20px;
+          background-color: var(--accent);
+          transform: rotate(0deg);
+        }
+        25% {
+          top: 20px;
+          left: 220px;
+          background-color: var(--success);
+          transform: rotate(90deg);
+        }
+        50% {
+          top: 220px;
+          left: 220px;
+          background-color: var(--warning);
+          transform: rotate(180deg);
+        }
+        75% {
+          top: 220px;
+          left: 20px;
+          background-color: var(--danger);
+          transform: rotate(270deg);
+        }
+        100% {
+          top: 20px;
+          left: 20px;
+          background-color: var(--accent);
+          transform: rotate(360deg);
+        }
+      }
+
+      .clockwise-demo {
+        animation: clockwiseSquare 4s ease-in-out infinite;
+      }
+
+      /* Variations */
+      @keyframes counterClockwise {
+        0% {
+          top: 20px;
+          left: 20px;
+          background-color: var(--purple);
+        }
+        25% {
+          top: 220px;
+          left: 20px;
+          background-color: var(--danger);
+        }
+        50% {
+          top: 220px;
+          left: 220px;
+          background-color: var(--warning);
+        }
+        75% {
+          top: 20px;
+          left: 220px;
+          background-color: var(--success);
+        }
+        100% {
+          top: 20px;
+          left: 20px;
+          background-color: var(--purple);
+        }
+      }
+
+      .counter-clockwise-demo {
+        animation: counterClockwise 4s linear infinite;
+      }
+
+      @keyframes fastBounceSquare {
+        0% {
+          top: 20px;
+          left: 20px;
+          transform: scale(1);
+        }
+        12.5% {
+          transform: scale(1.2);
+        }
+        25% {
+          top: 20px;
+          left: 220px;
+          transform: scale(1);
+        }
+        37.5% {
+          transform: scale(1.2);
+        }
+        50% {
+          top: 220px;
+          left: 220px;
+          transform: scale(1);
+        }
+        62.5% {
+          transform: scale(1.2);
+        }
+        75% {
+          top: 220px;
+          left: 20px;
+          transform: scale(1);
+        }
+        87.5% {
+          transform: scale(1.2);
+        }
+        100% {
+          top: 20px;
+          left: 20px;
+          transform: scale(1);
+        }
+      }
+
+      .fast-bounce-demo {
+        animation: fastBounceSquare 2s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+          infinite;
+      }
+
+      @keyframes smoothCurve {
+        0% {
+          transform: translate(20px, 20px) rotate(0deg);
+          border-radius: 8px;
+        }
+        25% {
+          transform: translate(220px, 20px) rotate(90deg);
+          border-radius: 50%;
+        }
+        50% {
+          transform: translate(220px, 220px) rotate(180deg);
+          border-radius: 8px;
+        }
+        75% {
+          transform: translate(20px, 220px) rotate(270deg);
+          border-radius: 50%;
+        }
+        100% {
+          transform: translate(20px, 20px) rotate(360deg);
+          border-radius: 8px;
+        }
+      }
+
+      .smooth-curve-demo {
+        animation: smoothCurve 3s ease-in-out infinite;
+      }
+
+      .code-block {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.2rem;
+        font-family: "Monaco", "Menlo", "Courier", monospace;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        overflow-x: auto;
+        margin-top: 1rem;
+      }
+
+      .interactive-controls {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .control-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .control-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .control-input {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .control-btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        margin: 0.25rem;
+      }
+
+      .control-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .control-btn.active {
+        background: rgba(255, 255, 255, 0.4);
+      }
+
+      .explanation-section {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .step-breakdown {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .step-card {
+        background: white;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .step-number {
+        background: var(--accent);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin: 0 auto 0.5rem;
+      }
+
+      .step-percentage {
+        font-weight: 600;
+        color: var(--accent);
+        font-size: 0.9rem;
+      }
+
+      .step-description {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 0.5rem;
+      }
+
+      .live-editor {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .editor-panel {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1.5rem;
+      }
+
+      .keyframe-textarea {
+        width: 100%;
+        min-height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        padding: 1rem;
+        color: white;
+        font-family: monospace;
+        font-size: 0.85rem;
+        resize: vertical;
+      }
+
+      .preview-panel {
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        .demo-showcase {
+          grid-template-columns: 1fr;
+        }
+        .control-group {
+          grid-template-columns: 1fr;
+        }
+        .live-editor {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <ul>
+          <li>
+            <a href="01-transitions-basics.html">1. Transitions Basics</a>
+          </li>
+          <li>
+            <a href="02-transition-properties.html">2. Transition Properties</a>
+          </li>
+          <li><a href="03-animations-basics.html">3. Animation Basics</a></li>
+          <li>
+            <a href="04-keyframes-examples.html">4. Keyframes Examples</a>
+          </li>
+          <li>
+            <a href="05-square-movement.html" class="current"
+              >5. Square Movement Demo</a
+            >
+          </li>
+          <li><a href="06-advanced-demos.html">6. Advanced Demos</a></li>
+        </ul>
+      </nav>
+
+      <section class="section">
+        <h1>Square Movement Demo</h1>
+        <p>
+          Learn how to create smooth movement patterns by animating a square
+          inside another square. This demonstrates positional animation and the
+          clockwise movement pattern you requested.
+        </p>
+
+        <div class="explanation-section">
+          <h3>🎯 Movement Pattern Breakdown</h3>
+          <p>
+            The square moves in a clockwise pattern:
+            <strong
+              >Top-Left → Top-Right → Bottom-Right → Bottom-Left → Back to
+              Start</strong
+            >
+          </p>
+
+          <div class="step-breakdown">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-percentage">0% - 25%</div>
+              <div class="step-description">
+                Move from top-left corner to top-right corner
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-percentage">25% - 50%</div>
+              <div class="step-description">
+                Move from top-right corner to bottom-right corner
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-percentage">50% - 75%</div>
+              <div class="step-description">
+                Move from bottom-right corner to bottom-left corner
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <div class="step-percentage">75% - 100%</div>
+              <div class="step-description">
+                Move from bottom-left corner back to top-left corner
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Basic Clockwise Movement</h2>
+        <div class="demo-showcase">
+          <div class="demo-container">
+            <h4>Main Demo - Clockwise with Color Changes</h4>
+            <div class="outer-square">
+              <div class="inner-square clockwise-demo">MOVE</div>
+            </div>
+          </div>
+          <div>
+            <h4>Complete CSS Code</h4>
+            <div class="code-block">
+              /* The outer container */ .outer-square { width: 300px; height:
+              300px; border: 3px solid #2f6df6; position: relative; background:
+              #f8faff; } /* The moving square */ .inner-square { width: 60px;
+              height: 60px; background: #2f6df6; position: absolute; animation:
+              clockwiseSquare 4s ease-in-out infinite; } /* The movement
+              keyframes */ @keyframes clockwiseSquare { 0% { top: 20px; left:
+              20px; background-color: #2f6df6; transform: rotate(0deg); } 25% {
+              top: 20px; left: 220px; background-color: #22c55e; transform:
+              rotate(90deg); } 50% { top: 220px; left: 220px; background-color:
+              #f59e0b; transform: rotate(180deg); } 75% { top: 220px; left:
+              20px; background-color: #ef4444; transform: rotate(270deg); } 100%
+              { top: 20px; left: 20px; background-color: #2f6df6; transform:
+              rotate(360deg); } }
+            </div>
+          </div>
+        </div>
+
+        <h2>Movement Variations</h2>
+        <div class="demo-showcase">
+          <div class="demo-container">
+            <h4>Counter-Clockwise Movement</h4>
+            <div class="outer-square">
+              <div class="inner-square counter-clockwise-demo">CCW</div>
+            </div>
+            <div class="code-block">
+              @keyframes counterClockwise { 0% { top: 20px; left: 20px; } 25% {
+              top: 220px; left: 20px; } /* Down */ 50% { top: 220px; left:
+              220px; } /* Right */ 75% { top: 20px; left: 220px; } /* Up */ 100%
+              { top: 20px; left: 20px; } /* Left */ }
+            </div>
+          </div>
+
+          <div class="demo-container">
+            <h4>Fast Bounce Movement</h4>
+            <div class="outer-square">
+              <div class="inner-square fast-bounce-demo">FAST</div>
+            </div>
+            <div class="code-block">
+              @keyframes fastBounceSquare { 0%, 100% { top: 20px; left: 20px; }
+              12.5%, 37.5%, 62.5%, 87.5% { transform: scale(1.2); /* Bounce at
+              corners */ } 25% { top: 20px; left: 220px; } 50% { top: 220px;
+              left: 220px; } 75% { top: 220px; left: 20px; } } .fast-bounce-demo
+              { animation: fastBounceSquare 2s cubic-bezier(0.68, -0.55, 0.265,
+              1.55) infinite; }
+            </div>
+          </div>
+
+          <div class="demo-container">
+            <h4>Smooth Curve with Transform</h4>
+            <div class="outer-square">
+              <div class="inner-square smooth-curve-demo">SMOOTH</div>
+            </div>
+            <div class="code-block">
+              /* Using transform instead of top/left */ @keyframes smoothCurve {
+              0% { transform: translate(20px, 20px) rotate(0deg); border-radius:
+              8px; } 25% { transform: translate(220px, 20px) rotate(90deg);
+              border-radius: 50%; /* Shape change */ } 50% { transform:
+              translate(220px, 220px) rotate(180deg); border-radius: 8px; } 75%
+              { transform: translate(20px, 220px) rotate(270deg); border-radius:
+              50%; } 100% { transform: translate(20px, 20px) rotate(360deg);
+              border-radius: 8px; } }
+            </div>
+          </div>
+        </div>
+
+        <h2>Key Learning Points</h2>
+        <div class="explanation-section">
+          <h4>1. Position vs Transform</h4>
+          <ul>
+            <li>
+              <strong>top/left properties:</strong> Direct positioning, easier
+              to understand coordinates
+            </li>
+            <li>
+              <strong>transform: translate():</strong> Better performance,
+              GPU-accelerated, smoother animation
+            </li>
+          </ul>
+
+          <h4>2. Timing Functions Impact</h4>
+          <ul>
+            <li>
+              <strong>ease-in-out:</strong> Smooth acceleration and deceleration
+              at each corner
+            </li>
+            <li>
+              <strong>linear:</strong> Constant speed throughout the animation
+            </li>
+            <li>
+              <strong>cubic-bezier():</strong> Custom timing for bounce effects
+            </li>
+          </ul>
+
+          <h4>3. Coordinate Calculation</h4>
+          <p>
+            For a 300×300px container with 60×60px moving element and 20px
+            padding:
+          </p>
+          <ul>
+            <li><strong>Top-Left:</strong> (20px, 20px)</li>
+            <li>
+              <strong>Top-Right:</strong> (220px, 20px) = (300 - 60 - 20, 20)
+            </li>
+            <li>
+              <strong>Bottom-Right:</strong> (220px, 220px) = (300 - 60 - 20,
+              300 - 60 - 20)
+            </li>
+            <li>
+              <strong>Bottom-Left:</strong> (20px, 220px) = (20, 300 - 60 - 20)
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="interactive-controls">
+        <h2>🎛️ Build Your Own Square Movement</h2>
+        <p>Customize the animation parameters and see the results instantly:</p>
+
+        <div class="control-group">
+          <div>
+            <label class="control-label">Duration (seconds):</label>
+            <input
+              type="number"
+              class="control-input"
+              id="duration-control"
+              value="4"
+              min="0.5"
+              max="10"
+              step="0.5"
+            />
+          </div>
+          <div>
+            <label class="control-label">Timing Function:</label>
+            <select class="control-input" id="timing-control">
+              <option value="ease-in-out">ease-in-out</option>
+              <option value="linear">linear</option>
+              <option value="ease">ease</option>
+              <option value="cubic-bezier(0.68, -0.55, 0.265, 1.55)">
+                bounce
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div>
+            <label class="control-label">Iteration Count:</label>
+            <select class="control-input" id="iteration-control">
+              <option value="1">1</option>
+              <option value="3">3</option>
+              <option value="infinite" selected>infinite</option>
+            </select>
+          </div>
+          <div>
+            <label class="control-label">Direction:</label>
+            <select class="control-input" id="direction-control">
+              <option value="normal">Clockwise</option>
+              <option value="reverse">Counter-Clockwise</option>
+              <option value="alternate">Alternating</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin: 1.5rem 0">
+          <button class="control-btn active" id="play-custom">Play</button>
+          <button class="control-btn" id="pause-custom">Pause</button>
+          <button class="control-btn" id="reset-custom">Reset</button>
+        </div>
+
+        <div class="live-editor">
+          <div class="editor-panel">
+            <h4>Custom Keyframes (Edit the path):</h4>
+            <textarea
+              class="keyframe-textarea"
+              id="custom-keyframes"
+              placeholder="Enter your keyframes..."
+            >
+0% { 
+    top: 20px; 
+    left: 20px; 
+    background-color: #2f6df6;
+}
+25% { 
+    top: 20px; 
+    left: 220px; 
+    background-color: #22c55e;
+}
+50% { 
+    top: 220px; 
+    left: 220px; 
+    background-color: #f59e0b;
+}
+75% { 
+    top: 220px; 
+    left: 20px; 
+    background-color: #ef4444;
+}
+100% { 
+    top: 20px; 
+    left: 20px; 
+    background-color: #2f6df6;
+}</textarea
+            >
+            <button
+              class="control-btn"
+              style="width: 100%; margin-top: 1rem"
+              id="apply-keyframes"
+            >
+              Apply Keyframes
+            </button>
+          </div>
+
+          <div class="preview-panel">
+            <h4>Live Preview:</h4>
+            <div
+              class="outer-square"
+              style="
+                background: rgba(255, 255, 255, 0.1);
+                border-color: rgba(255, 255, 255, 0.5);
+              "
+            >
+              <div
+                class="inner-square"
+                id="custom-square"
+                style="background: white; color: #2f6df6"
+              >
+                CUSTOM
+              </div>
+            </div>
+            <div
+              class="code-block"
+              style="
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+              "
+              id="generated-css"
+            >
+              /* Generated CSS will appear here */
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Interactive controls for custom animation
+      const customSquare = document.getElementById("custom-square");
+      const durationControl = document.getElementById("duration-control");
+      const timingControl = document.getElementById("timing-control");
+      const iterationControl = document.getElementById("iteration-control");
+      const directionControl = document.getElementById("direction-control");
+      const customKeyframes = document.getElementById("custom-keyframes");
+      const generatedCSS = document.getElementById("generated-css");
+
+      const playBtn = document.getElementById("play-custom");
+      const pauseBtn = document.getElementById("pause-custom");
+      const resetBtn = document.getElementById("reset-custom");
+      const applyBtn = document.getElementById("apply-keyframes");
+
+      let currentStyleElement = null;
+
+      function updateAnimation() {
+        const duration = durationControl.value;
+        const timing = timingControl.value;
+        const iteration = iterationControl.value;
+        const direction = directionControl.value;
+        const keyframes = customKeyframes.value;
+
+        // Remove old style element
+        if (currentStyleElement) {
+          document.head.removeChild(currentStyleElement);
+        }
+
+        // Create new style element
+        currentStyleElement = document.createElement("style");
+        const css = `
+                @keyframes customMovement {
+                    ${keyframes}
+                }
+                .custom-animation {
+                    animation: customMovement ${duration}s ${timing} ${iteration} ${direction};
+                }
+            `;
+        currentStyleElement.textContent = css;
+        document.head.appendChild(currentStyleElement);
+
+        // Update generated CSS display
+        generatedCSS.textContent = `@keyframes customMovement {\n    ${keyframes.replace(/\n/g, "\n    ")}\n}\n\n.custom-animation {\n    animation: customMovement ${duration}s ${timing} ${iteration} ${direction};\n}`;
+
+        // Apply animation if playing
+        if (playBtn.classList.contains("active")) {
+          customSquare.className = "inner-square custom-animation";
+        }
+      }
+
+      function playAnimation() {
+        playBtn.classList.add("active");
+        pauseBtn.classList.remove("active");
+        customSquare.style.animationPlayState = "running";
+        customSquare.className = "inner-square custom-animation";
+      }
+
+      function pauseAnimation() {
+        pauseBtn.classList.add("active");
+        playBtn.classList.remove("active");
+        customSquare.style.animationPlayState = "paused";
+      }
+
+      function resetAnimation() {
+        playBtn.classList.add("active");
+        pauseBtn.classList.remove("active");
+        customSquare.className = "inner-square";
+        setTimeout(() => {
+          customSquare.className = "inner-square custom-animation";
+          customSquare.style.animationPlayState = "running";
+        }, 10);
+      }
+
+      // Event listeners
+      durationControl.addEventListener("input", updateAnimation);
+      timingControl.addEventListener("change", updateAnimation);
+      iterationControl.addEventListener("change", updateAnimation);
+      directionControl.addEventListener("change", updateAnimation);
+      applyBtn.addEventListener("click", updateAnimation);
+
+      playBtn.addEventListener("click", playAnimation);
+      pauseBtn.addEventListener("click", pauseAnimation);
+      resetBtn.addEventListener("click", resetAnimation);
+
+      // Initialize
+      updateAnimation();
+    </script>
+  </body>
+</html>

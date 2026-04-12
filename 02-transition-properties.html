@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition Properties Deep Dive - Interactive Lab</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #10243e;
+        --muted: #51627c;
+        --accent: #2f6df6;
+        --border: #dbe2ef;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --purple: #9333ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Inter",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .nav {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .nav a {
+        color: var(--accent);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.current {
+        background: var(--accent);
+        color: white;
+      }
+
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
+      }
+
+      .property-breakdown {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .property-card {
+        background: var(--panel);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .property-card:hover {
+        border-color: var(--accent);
+      }
+
+      .property-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+
+      .property-description {
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .demo-area {
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fafbfc;
+        margin: 1rem 0;
+      }
+
+      .demo-box {
+        width: 80px;
+        height: 80px;
+        background: var(--accent);
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin: 0.5rem;
+      }
+
+      .code-block {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.2rem;
+        font-family: "Monaco", "Menlo", "Courier", monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+
+      /* Property Examples */
+
+      /* Duration Examples */
+      .duration-fast {
+        transition: all 0.1s ease;
+      }
+      .duration-normal {
+        transition: all 0.3s ease;
+      }
+      .duration-slow {
+        transition: all 0.8s ease;
+      }
+      .duration-very-slow {
+        transition: all 2s ease;
+      }
+
+      .duration-fast:hover,
+      .duration-normal:hover,
+      .duration-slow:hover,
+      .duration-very-slow:hover {
+        transform: translateY(-10px);
+        background-color: var(--success);
+      }
+
+      /* Timing Function Examples */
+      .timing-linear {
+        transition: transform 0.6s linear;
+      }
+      .timing-ease {
+        transition: transform 0.6s ease;
+      }
+      .timing-ease-in {
+        transition: transform 0.6s ease-in;
+      }
+      .timing-ease-out {
+        transition: transform 0.6s ease-out;
+      }
+      .timing-ease-in-out {
+        transition: transform 0.6s ease-in-out;
+      }
+      .timing-bounce {
+        transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .timing-linear:hover,
+      .timing-ease:hover,
+      .timing-ease-in:hover,
+      .timing-ease-out:hover,
+      .timing-ease-in-out:hover,
+      .timing-bounce:hover {
+        transform: translateX(100px);
+      }
+
+      /* Property Specific Examples */
+      .prop-transform {
+        transition: transform 0.4s ease;
+      }
+      .prop-background {
+        transition: background-color 0.4s ease;
+      }
+      .prop-opacity {
+        transition: opacity 0.4s ease;
+      }
+      .prop-width {
+        transition: width 0.4s ease;
+      }
+      .prop-border {
+        transition: border-radius 0.4s ease;
+      }
+      .prop-box-shadow {
+        transition: box-shadow 0.4s ease;
+      }
+
+      .prop-transform:hover {
+        transform: rotate(180deg) scale(1.2);
+      }
+      .prop-background:hover {
+        background-color: var(--danger);
+      }
+      .prop-opacity:hover {
+        opacity: 0.3;
+      }
+      .prop-width:hover {
+        width: 120px;
+      }
+      .prop-border:hover {
+        border-radius: 50%;
+      }
+      .prop-box-shadow:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Delay Examples */
+      .delay-none {
+        transition: all 0.3s ease;
+      }
+      .delay-short {
+        transition: all 0.3s ease 0.2s;
+      }
+      .delay-medium {
+        transition: all 0.3s ease 0.5s;
+      }
+      .delay-long {
+        transition: all 0.3s ease 1s;
+      }
+
+      .delay-none:hover,
+      .delay-short:hover,
+      .delay-medium:hover,
+      .delay-long:hover {
+        transform: scale(1.3);
+        background-color: var(--purple);
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .interactive-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .interactive-section .code-block {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .slider-container {
+        margin: 1rem 0;
+      }
+
+      .slider {
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .property-breakdown {
+          grid-template-columns: 1fr;
+        }
+
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <ul>
+          <li>
+            <a href="01-transitions-basics.html">1. Transitions Basics</a>
+          </li>
+          <li>
+            <a href="02-transition-properties.html" class="current"
+              >2. Transition Properties</a
+            >
+          </li>
+          <li><a href="03-animations-basics.html">3. Animation Basics</a></li>
+          <li>
+            <a href="04-keyframes-examples.html">4. Keyframes Examples</a>
+          </li>
+          <li><a href="05-square-movement.html">5. Square Movement Demo</a></li>
+          <li><a href="06-advanced-demos.html">6. Advanced Demos</a></li>
+        </ul>
+      </nav>
+
+      <section class="section">
+        <h1>Transition Properties Deep Dive</h1>
+        <p>
+          Let's explore each transition property in detail with interactive
+          examples you can modify and experiment with.
+        </p>
+
+        <div class="property-breakdown">
+          <div class="property-card">
+            <div class="property-title">transition-property</div>
+            <div class="property-description">
+              Specifies which CSS properties should be animated.
+            </div>
+            <div class="code-block">
+              /* Options */ all /* All animatable properties */ none /* No
+              properties */ transform /* Specific property */ background-color,
+              transform /* Multiple */
+            </div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-title">transition-duration</div>
+            <div class="property-description">
+              How long the transition should take.
+            </div>
+            <div class="code-block">
+              /* Time units */ 0.3s /* Seconds */ 300ms /* Milliseconds */ 1.5s
+              /* Decimal seconds */ 0s /* Instant (no transition) */
+            </div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-title">transition-timing-function</div>
+            <div class="property-description">
+              The speed curve of the transition effect.
+            </div>
+            <div class="code-block">
+              /* Predefined keywords */ linear, ease, ease-in, ease-out,
+              ease-in-out /* Custom cubic-bezier */ cubic-bezier(0.25, 0.1,
+              0.25, 1) /* Steps (for discrete animations) */ steps(4, end)
+            </div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-title">transition-delay</div>
+            <div class="property-description">
+              When the transition should start (after trigger).
+            </div>
+            <div class="code-block">
+              /* Delay examples */ 0s /* Start immediately */ 0.5s /* Wait 500ms
+              */ 1s /* Wait 1 second */ -0.5s /* Start 500ms into transition */
+            </div>
+          </div>
+        </div>
+
+        <h2>1. Duration Comparison</h2>
+        <p>
+          Hover over each box to see how different durations affect the same
+          transformation:
+        </p>
+
+        <div class="comparison-grid">
+          <div>
+            <div class="demo-area">
+              <div class="demo-box duration-fast">0.1s</div>
+            </div>
+            <div class="code-block">transition: all 0.1s ease;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box duration-normal">0.3s</div>
+            </div>
+            <div class="code-block">transition: all 0.3s ease;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box duration-slow">0.8s</div>
+            </div>
+            <div class="code-block">transition: all 0.8s ease;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box duration-very-slow">2s</div>
+            </div>
+            <div class="code-block">transition: all 2s ease;</div>
+          </div>
+        </div>
+
+        <h2>2. Timing Function Comparison</h2>
+        <p>See how different timing functions create different motion feels:</p>
+
+        <div class="comparison-grid">
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-linear">linear</div>
+            </div>
+            <div class="code-block">transition: transform 0.6s linear;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-ease">ease</div>
+            </div>
+            <div class="code-block">transition: transform 0.6s ease;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-ease-in">ease-in</div>
+            </div>
+            <div class="code-block">transition: transform 0.6s ease-in;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-ease-out">ease-out</div>
+            </div>
+            <div class="code-block">transition: transform 0.6s ease-out;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-ease-in-out">ease-in-out</div>
+            </div>
+            <div class="code-block">
+              transition: transform 0.6s ease-in-out;
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box timing-bounce">bounce</div>
+            </div>
+            <div class="code-block">
+              transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            </div>
+          </div>
+        </div>
+
+        <h2>3. Property-Specific Transitions</h2>
+        <p>Different CSS properties create different visual effects:</p>
+
+        <div class="comparison-grid">
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-transform">Transform</div>
+            </div>
+            <div class="code-block">
+              transition: transform 0.4s ease; /* Rotate + Scale */
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-background">Background</div>
+            </div>
+            <div class="code-block">
+              transition: background-color 0.4s ease; /* Color change */
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-opacity">Opacity</div>
+            </div>
+            <div class="code-block">
+              transition: opacity 0.4s ease; /* Fade effect */
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-width">Width</div>
+            </div>
+            <div class="code-block">
+              transition: width 0.4s ease; /* Size change */
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-border">Border</div>
+            </div>
+            <div class="code-block">
+              transition: border-radius 0.4s ease; /* Shape change */
+            </div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box prop-box-shadow">Shadow</div>
+            </div>
+            <div class="code-block">
+              transition: box-shadow 0.4s ease; /* Depth effect */
+            </div>
+          </div>
+        </div>
+
+        <h2>4. Delay Examples</h2>
+        <p>See how different delays affect when animations start:</p>
+
+        <div class="comparison-grid">
+          <div>
+            <div class="demo-area">
+              <div class="demo-box delay-none">No Delay</div>
+            </div>
+            <div class="code-block">transition: all 0.3s ease;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box delay-short">0.2s Delay</div>
+            </div>
+            <div class="code-block">transition: all 0.3s ease 0.2s;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box delay-medium">0.5s Delay</div>
+            </div>
+            <div class="code-block">transition: all 0.3s ease 0.5s;</div>
+          </div>
+          <div>
+            <div class="demo-area">
+              <div class="demo-box delay-long">1s Delay</div>
+            </div>
+            <div class="code-block">transition: all 0.3s ease 1s;</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="interactive-section">
+        <h2>🎛️ Interactive Transition Builder</h2>
+        <p>
+          Use the controls below to experiment with different transition
+          settings:
+        </p>
+
+        <div class="slider-container">
+          <div class="slider-label">
+            <span>Duration:</span>
+            <span id="duration-value">0.5s</span>
+          </div>
+          <input
+            type="range"
+            id="duration-slider"
+            class="slider"
+            min="0.1"
+            max="3"
+            step="0.1"
+            value="0.5"
+          />
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-label">
+            <span>Delay:</span>
+            <span id="delay-value">0s</span>
+          </div>
+          <input
+            type="range"
+            id="delay-slider"
+            class="slider"
+            min="0"
+            max="2"
+            step="0.1"
+            value="0"
+          />
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-label">
+            <span>Timing Function:</span>
+            <span id="timing-value">ease</span>
+          </div>
+          <select
+            id="timing-select"
+            style="width: 100%; padding: 0.5rem; border-radius: 6px"
+          >
+            <option value="linear">linear</option>
+            <option value="ease" selected>ease</option>
+            <option value="ease-in">ease-in</option>
+            <option value="ease-out">ease-out</option>
+            <option value="ease-in-out">ease-in-out</option>
+            <option value="cubic-bezier(0.68, -0.55, 0.265, 1.55)">
+              bounce
+            </option>
+          </select>
+        </div>
+
+        <div
+          class="demo-area"
+          style="
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+          "
+        >
+          <div
+            class="demo-box"
+            id="interactive-box"
+            style="background: white; color: #2f6df6"
+          >
+            Hover me!
+          </div>
+        </div>
+
+        <div class="code-block" id="generated-code">
+          transition: transform 0.5s ease 0s;
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Interactive transition builder
+      const durationSlider = document.getElementById("duration-slider");
+      const delaySlider = document.getElementById("delay-slider");
+      const timingSelect = document.getElementById("timing-select");
+      const interactiveBox = document.getElementById("interactive-box");
+      const generatedCode = document.getElementById("generated-code");
+      const durationValue = document.getElementById("duration-value");
+      const delayValue = document.getElementById("delay-value");
+      const timingValue = document.getElementById("timing-value");
+
+      function updateTransition() {
+        const duration = durationSlider.value;
+        const delay = delaySlider.value;
+        const timing = timingSelect.value;
+
+        durationValue.textContent = duration + "s";
+        delayValue.textContent = delay + "s";
+        timingValue.textContent = timing;
+
+        const transitionCSS = `transition: transform ${duration}s ${timing} ${delay}s;`;
+        interactiveBox.style.transition = `transform ${duration}s ${timing} ${delay}s`;
+        generatedCode.textContent = transitionCSS;
+      }
+
+      // Add hover effect to interactive box
+      interactiveBox.addEventListener("mouseenter", () => {
+        interactiveBox.style.transform = "scale(1.5) rotate(45deg)";
+      });
+
+      interactiveBox.addEventListener("mouseleave", () => {
+        interactiveBox.style.transform = "scale(1) rotate(0deg)";
+      });
+
+      // Event listeners
+      durationSlider.addEventListener("input", updateTransition);
+      delaySlider.addEventListener("input", updateTransition);
+      timingSelect.addEventListener("change", updateTransition);
+
+      // Initialize
+      updateTransition();
+    </script>
+  </body>
+</html>
