@@ -300,11 +300,24 @@
 
       .control-input {
         width: 100%;
-        padding: 0.5rem;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
         color: white;
+        font-family: inherit;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+      }
+
+      .control-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .control-input:hover {
+        border-color: rgba(255, 255, 255, 0.3);
       }
 
       .control-btn {
@@ -392,14 +405,26 @@
       .keyframe-textarea {
         width: 100%;
         min-height: 300px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 6px;
-        padding: 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 1.5rem;
         color: white;
-        font-family: monospace;
-        font-size: 0.85rem;
+        font-family: "Monaco", "Menlo", "Courier New", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
         resize: vertical;
+        transition: all 0.2s ease;
+      }
+
+      .keyframe-textarea:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .keyframe-textarea:hover {
+        border-color: rgba(255, 255, 255, 0.2);
       }
 
       .preview-panel {
@@ -415,6 +440,29 @@
         }
         .live-editor {
           grid-template-columns: 1fr;
+        }
+
+        .keyframe-textarea {
+          font-size: 0.85rem;
+          padding: 1rem;
+          min-height: 200px;
+        }
+
+        .outer-square {
+          width: 250px;
+          height: 250px;
+        }
+
+        .control-input {
+          font-size: 0.9rem;
+        }
+
+        .interactive-controls {
+          padding: 1.5rem;
+        }
+
+        .container {
+          padding: 1rem 0.5rem;
         }
       }
     </style>
@@ -451,7 +499,7 @@
         </p>
 
         <div class="explanation-section">
-          <h3>🎯 Movement Pattern Breakdown</h3>
+          <h3>Movement Pattern Breakdown</h3>
           <p>
             The square moves in a clockwise pattern:
             <strong
@@ -618,7 +666,7 @@
       </section>
 
       <section class="interactive-controls">
-        <h2>🎛️ Build Your Own Square Movement</h2>
+        <h2>Build Your Own Square Movement</h2>
         <p>Customize the animation parameters and see the results instantly:</p>
 
         <div class="control-group">

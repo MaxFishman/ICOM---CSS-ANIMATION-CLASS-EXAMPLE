@@ -191,14 +191,29 @@
       }
 
       .editable {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1rem;
-        font-family: monospace;
-        min-height: 120px;
+        background: var(--panel);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        font-family: "Monaco", "Menlo", "Courier New", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        min-height: 180px;
         resize: vertical;
         width: 100%;
+        color: var(--ink);
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(16, 36, 62, 0.08);
+      }
+
+      .editable:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 4px 16px rgba(47, 109, 246, 0.15);
+      }
+
+      .editable:hover {
+        border-color: rgba(47, 109, 246, 0.3);
       }
 
       .live-demo {
@@ -207,11 +222,38 @@
         border-radius: 12px;
         background: white;
         margin-top: 1rem;
+        box-shadow: 0 2px 8px rgba(16, 36, 62, 0.08);
+        transition: all 0.2s ease;
+      }
+
+      .live-demo:hover {
+        border-color: rgba(47, 109, 246, 0.3);
       }
 
       @media (max-width: 768px) {
         .example-grid {
           grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .editable {
+          font-size: 0.85rem;
+          padding: 1rem;
+          min-height: 150px;
+        }
+
+        .live-demo {
+          padding: 1.5rem;
+        }
+
+        .demo-box {
+          width: 50px;
+          height: 50px;
+          font-size: 0.7rem;
+        }
+
+        .container {
+          padding: 1rem 0.5rem;
         }
       }
     </style>
