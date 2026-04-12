@@ -47,53 +47,137 @@
         border-radius: 12px;
         padding: 0.75rem;
         margin-bottom: 2rem;
+        position: relative;
       }
 
-      .nav ul {
+      .nav-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .nav-title {
+        font-weight: 600;
+        color: var(--ink);
+        font-size: 1.1rem;
+      }
+
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .hamburger:hover {
+        background: rgba(47, 109, 246, 0.1);
+      }
+
+      .hamburger span {
+        width: 20px;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: scale(0);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+
+      .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-top: 0.5rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 25px rgba(16, 36, 62, 0.15);
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .nav-menu ul {
         list-style: none;
         margin: 0;
-        padding: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        justify-content: center;
+        padding: 0.5rem;
       }
 
-      .nav a {
-        color: var(--accent);
+      .nav-menu li {
+        margin: 0;
+      }
+
+      .nav-menu a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: var(--ink);
         text-decoration: none;
-        padding: 0.4rem 0.75rem;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        background: var(--panel);
+        border-radius: 8px;
         transition: all 0.2s ease;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 500;
-        white-space: nowrap;
+        border-left: 3px solid transparent;
       }
 
-      .nav a:hover,
-      .nav a.current {
-        background: var(--accent);
-        color: white;
+      .nav-menu a:hover {
+        background: rgba(47, 109, 246, 0.08);
+        border-left-color: var(--accent);
+        transform: translateX(4px);
+      }
+
+      .nav-menu a.current {
+        background: rgba(47, 109, 246, 0.1);
+        color: var(--accent);
+        border-left-color: var(--accent);
+        font-weight: 600;
       }
 
       @media (max-width: 768px) {
         .nav {
-          padding: 0.5rem;
+          padding: 0.5rem 0.75rem;
         }
 
-        .nav ul {
-          gap: 0.3rem;
-          justify-content: space-between;
+        .nav-title {
+          font-size: 1rem;
         }
 
-        .nav a {
-          padding: 0.3rem 0.5rem;
-          font-size: 0.8rem;
-          flex: 1;
-          text-align: center;
-          min-width: 0;
+        .hamburger {
+          padding: 6px;
+        }
+
+        .nav-menu {
+          margin-top: 0.3rem;
+        }
+
+        .nav-menu a {
+          padding: 0.6rem 0.8rem;
+          font-size: 0.9rem;
         }
       }
 
@@ -554,22 +638,34 @@
   <body>
     <div class="container">
       <nav class="nav">
-        <ul>
-          <li>
-            <a href="01-transitions-basics.html">1. Basics</a>
-          </li>
-          <li>
-            <a href="02-transition-properties.html">2. Properties</a>
-          </li>
-          <li><a href="03-animations-basics.html">3. Animations</a></li>
-          <li>
-            <a href="04-keyframes-examples.html">4. Keyframes Examples</a>
-          </li>
-          <li>
-            <a href="05-square-movement.html" class="current">5. Square Demo</a>
-          </li>
-          <li><a href="06-advanced-demos.html">6. Advanced Demos</a></li>
-        </ul>
+        <div class="nav-toggle" onclick="toggleNav()">
+          <span class="nav-title">CSS Tutorial Navigation</span>
+          <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="nav-menu" id="navMenu">
+          <ul>
+            <li>
+              <a href="01-transitions-basics.html">1. Basics</a>
+            </li>
+            <li>
+              <a href="02-transition-properties.html">2. Properties</a>
+            </li>
+            <li><a href="03-animations-basics.html">3. Animations</a></li>
+            <li>
+              <a href="04-keyframes-examples.html">4. Keyframes</a>
+            </li>
+            <li>
+              <a href="05-square-movement.html" class="current"
+                >5. Square Demo</a
+              >
+            </li>
+            <li><a href="06-advanced-demos.html">6. Advanced</a></li>
+          </ul>
+        </div>
       </nav>
 
       <section class="section">
@@ -890,6 +986,43 @@
     </div>
 
     <script>
+      // Hamburger menu functionality
+      function toggleNav() {
+        const navMenu = document.getElementById("navMenu");
+        const hamburger = document.getElementById("hamburger");
+
+        navMenu.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector(".nav");
+        const navMenu = document.getElementById("navMenu");
+        const hamburger = document.getElementById("hamburger");
+
+        if (
+          !nav.contains(event.target) &&
+          navMenu.classList.contains("active")
+        ) {
+          navMenu.classList.remove("active");
+          hamburger.classList.remove("active");
+        }
+      });
+
+      // Close menu when pressing Escape
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          const navMenu = document.getElementById("navMenu");
+          const hamburger = document.getElementById("hamburger");
+
+          if (navMenu.classList.contains("active")) {
+            navMenu.classList.remove("active");
+            hamburger.classList.remove("active");
+          }
+        }
+      });
+
       // Interactive controls for custom animation
       const customSquare = document.getElementById("custom-square");
       const durationControl = document.getElementById("duration-control");
