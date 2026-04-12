@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Transitions & Animations Lab</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #10243e;
+      --muted: #51627c;
+      --accent: #2f6df6;
+      --border: #dbe2ef;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    h1, h2, h3 { line-height: 1.25; margin-top: 0; }
+
+    .intro,
+    .property-grid,
+    .playground {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(16, 36, 62, 0.05);
+      margin-bottom: 1rem;
+    }
+
+    .property-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .property-grid ul {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .playground-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .editor-pane,
+    .preview-pane {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fbfdff;
+    }
+
+    .pane-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: #eef3ff;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .editor-grid {
+      display: grid;
+      gap: 0.7rem;
+      padding: 0.7rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem;
+      resize: vertical;
+      font: 0.86rem/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: #10243e;
+      background: #fff;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 420px;
+      border: 0;
+      background: #fff;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    button {
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0.48rem 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: #193662;
+      border-color: var(--border);
+    }
+
+    .muted {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    code { background: #f0f4ff; padding: 0.08rem 0.3rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <h1>CSS Transitions & Animations Lab</h1>
+      <p class="muted">Edit the code, then the preview updates immediately—similar to a lightweight CodePen for class demos and GitHub Pages hosting.</p>
+      <p class="muted">Tip: start with <code>transition: transform 0.4s ease;</code> and <code>@keyframes spin { ... }</code> to explore timing, delay, and iteration settings.</p>
+    </section>
+
+    <section class="property-grid" aria-label="Key property reference">
+      <article>
+        <h2>Transition properties</h2>
+        <ul>
+          <li><code>transition-property</code> – which CSS property should animate</li>
+          <li><code>transition-duration</code> – how long the change takes</li>
+          <li><code>transition-timing-function</code> – easing curve</li>
+          <li><code>transition-delay</code> – wait time before starting</li>
+          <li>Shorthand: <code>transition: property duration timing delay;</code></li>
+        </ul>
+      </article>
+      <article>
+        <h2>Animation properties</h2>
+        <ul>
+          <li><code>@keyframes</code> – define key steps of motion</li>
+          <li><code>animation-name</code> and <code>animation-duration</code></li>
+          <li><code>animation-iteration-count</code> – repeats (e.g., <code>infinite</code>)</li>
+          <li><code>animation-direction</code> and <code>animation-fill-mode</code></li>
+          <li>Shorthand: <code>animation: name duration timing delay count direction;</code></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="playground" id="transition-lab">
+      <h2>Live Example 1: Hover Transition</h2>
+      <p class="muted">Change size, color, rotation, timing, and delay. Hover the square in preview.</p>
+      <div class="playground-grid">
+        <div class="editor-pane">
+          <div class="pane-head">Editable code</div>
+          <div class="editor-grid">
+            <label>
+              HTML
+              <textarea id="transition-html"></textarea>
+            </label>
+            <label>
+              CSS
+              <textarea id="transition-css"></textarea>
+            </label>
+          </div>
+          <div class="controls" style="padding: 0 0.7rem 0.8rem;">
+            <button type="button" data-run="transition">Run preview</button>
+            <button type="button" class="secondary" data-reset="transition">Reset example</button>
+          </div>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-head">Live preview</div>
+          <iframe id="transition-preview" title="Transition preview"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="playground" id="animation-lab">
+      <h2>Live Example 2: Keyframe Animation</h2>
+      <p class="muted">Edit keyframes, duration, delay, count, and direction. The ball animates automatically.</p>
+      <div class="playground-grid">
+        <div class="editor-pane">
+          <div class="pane-head">Editable code</div>
+          <div class="editor-grid">
+            <label>
+              HTML
+              <textarea id="animation-html"></textarea>
+            </label>
+            <label>
+              CSS
+              <textarea id="animation-css"></textarea>
+            </label>
+          </div>
+          <div class="controls" style="padding: 0 0.7rem 0.8rem;">
+            <button type="button" data-run="animation">Run preview</button>
+            <button type="button" class="secondary" data-reset="animation">Reset example</button>
+          </div>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-head">Live preview</div>
+          <iframe id="animation-preview" title="Animation preview"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const defaults = {
+      transition: {
+        html: `<div class="stage">\n  <button class="card">Hover me</button>\n</div>`,
+        css: `.stage {\n  min-height: 220px;\n  display: grid;\n  place-items: center;\n  background: linear-gradient(150deg, #f5f8ff, #ecf5ff);\n}\n\n.card {\n  width: 120px;\n  height: 120px;\n  border: 0;\n  border-radius: 16px;\n  background: #2f6df6;\n  color: #fff;\n  font-weight: 700;\n  cursor: pointer;\n  transition: transform 0.5s ease, background-color 0.5s ease, border-radius 0.4s ease;\n}\n\n.card:hover {\n  transform: rotate(15deg) scale(1.18);\n  border-radius: 35px;\n  background: #11a690;\n}`
+      },
+      animation: {
+        html: `<div class="arena">\n  <div class="ball" aria-label="Animated ball"></div>\n</div>`,
+        css: `.arena {\n  min-height: 220px;\n  padding: 18px;\n  background: linear-gradient(150deg, #f6fbff, #f3f4ff);\n}\n\n.ball {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, #ffe177, #ff8f3d);\n  animation: moveAndSpin 2.6s ease-in-out 0s infinite alternate;\n}\n\n@keyframes moveAndSpin {\n  0% {\n    transform: translate(0, 0) rotate(0deg);\n  }\n  50% {\n    transform: translate(120px, 40px) rotate(180deg);\n  }\n  100% {\n    transform: translate(240px, 0) rotate(360deg);\n  }\n}`
+      }
+    };
+
+    function buildDoc(html, css) {
+      return `<!doctype html><html><head><meta charset="UTF-8"><style>body{margin:0;font-family:system-ui,sans-serif;}${css}</style></head><body>${html}</body></html>`;
+    }
+
+    function render(kind) {
+      const html = document.getElementById(`${kind}-html`).value;
+      const css = document.getElementById(`${kind}-css`).value;
+      document.getElementById(`${kind}-preview`).srcdoc = buildDoc(html, css);
+    }
+
+    function reset(kind) {
+      document.getElementById(`${kind}-html`).value = defaults[kind].html;
+      document.getElementById(`${kind}-css`).value = defaults[kind].css;
+      render(kind);
+    }
+
+    ["transition", "animation"].forEach((kind) => {
+      reset(kind);
+      document.getElementById(`${kind}-html`).addEventListener("input", () => render(kind));
+      document.getElementById(`${kind}-css`).addEventListener("input", () => render(kind));
+    });
+
+    document.querySelectorAll("[data-run]").forEach((button) => {
+      button.addEventListener("click", () => render(button.dataset.run));
+    });
+
+    document.querySelectorAll("[data-reset]").forEach((button) => {
+      button.addEventListener("click", () => reset(button.dataset.reset));
+    });
+  </script>
+</body>
+</html>
