@@ -304,6 +304,43 @@
         margin-bottom: 0.5rem;
       }
 
+      .code-editor {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-family:
+          ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        background: #fafbfc;
+        color: var(--ink);
+        resize: vertical;
+        min-height: 80px;
+        margin-top: 0.5rem;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .code-editor:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(47, 109, 246, 0.1);
+      }
+
+      .demo-area {
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin-bottom: 0.5rem;
+      }
+
       @media (max-width: 768px) {
         .property-breakdown {
           grid-template-columns: 1fr;
@@ -337,7 +374,7 @@
       </nav>
 
       <section class="section">
-        <h1>Transition Properties Deep Dive</h1>
+        <h1>Interactive Transition Properties Deep Dive</h1>
         <p>
           Let's explore each transition property in detail with interactive
           examples you can modify and experiment with.
@@ -393,139 +430,273 @@
 
         <h2>1. Duration Comparison</h2>
         <p>
-          Hover over each box to see how different durations affect the same
-          transformation:
+          Edit the CSS code below and hover over each box to see how different
+          durations affect the same transformation:
         </p>
 
         <div class="comparison-grid">
           <div>
             <div class="demo-area">
-              <div class="demo-box duration-fast">0.1s</div>
+              <div class="demo-box duration-fast" id="duration-demo-1">
+                0.1s
+              </div>
             </div>
-            <div class="code-block">transition: all 0.1s ease;</div>
+            <textarea class="code-editor" id="duration-css-1" rows="3">
+.duration-fast {
+  transition: all 0.1s ease;
+}
+.duration-fast:hover {
+  transform: scale(1.2);
+  background-color: #22c55e;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box duration-normal">0.3s</div>
+              <div class="demo-box duration-normal" id="duration-demo-2">
+                0.3s
+              </div>
             </div>
-            <div class="code-block">transition: all 0.3s ease;</div>
+            <textarea class="code-editor" id="duration-css-2" rows="3">
+.duration-normal {
+  transition: all 0.3s ease;
+}
+.duration-normal:hover {
+  transform: scale(1.2);
+  background-color: #22c55e;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box duration-slow">0.8s</div>
+              <div class="demo-box duration-slow" id="duration-demo-3">
+                0.8s
+              </div>
             </div>
-            <div class="code-block">transition: all 0.8s ease;</div>
+            <textarea class="code-editor" id="duration-css-3" rows="3">
+.duration-slow {
+  transition: all 0.8s ease;
+}
+.duration-slow:hover {
+  transform: scale(1.2);
+  background-color: #22c55e;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box duration-very-slow">2s</div>
+              <div class="demo-box duration-very-slow" id="duration-demo-4">
+                2s
+              </div>
             </div>
-            <div class="code-block">transition: all 2s ease;</div>
+            <textarea class="code-editor" id="duration-css-4" rows="3">
+.duration-very-slow {
+  transition: all 2s ease;
+}
+.duration-very-slow:hover {
+  transform: scale(1.2);
+  background-color: #22c55e;
+}</textarea
+            >
           </div>
         </div>
 
         <h2>2. Timing Function Comparison</h2>
-        <p>See how different timing functions create different motion feels:</p>
+        <p>
+          Edit the CSS below to experiment with different timing functions and
+          see how they create different motion feels:
+        </p>
 
         <div class="comparison-grid">
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-linear">linear</div>
+              <div class="demo-box timing-linear" id="timing-demo-1">
+                linear
+              </div>
             </div>
-            <div class="code-block">transition: transform 0.6s linear;</div>
+            <textarea class="code-editor" id="timing-css-1" rows="4">
+.timing-linear {
+  transition: transform 0.6s linear;
+}
+.timing-linear:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-ease">ease</div>
+              <div class="demo-box timing-ease" id="timing-demo-2">ease</div>
             </div>
-            <div class="code-block">transition: transform 0.6s ease;</div>
+            <textarea class="code-editor" id="timing-css-2" rows="4">
+.timing-ease {
+  transition: transform 0.6s ease;
+}
+.timing-ease:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-ease-in">ease-in</div>
+              <div class="demo-box timing-ease-in" id="timing-demo-3">
+                ease-in
+              </div>
             </div>
-            <div class="code-block">transition: transform 0.6s ease-in;</div>
+            <textarea class="code-editor" id="timing-css-3" rows="4">
+.timing-ease-in {
+  transition: transform 0.6s ease-in;
+}
+.timing-ease-in:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-ease-out">ease-out</div>
+              <div class="demo-box timing-ease-out" id="timing-demo-4">
+                ease-out
+              </div>
             </div>
-            <div class="code-block">transition: transform 0.6s ease-out;</div>
+            <textarea class="code-editor" id="timing-css-4" rows="4">
+.timing-ease-out {
+  transition: transform 0.6s ease-out;
+}
+.timing-ease-out:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-ease-in-out">ease-in-out</div>
+              <div class="demo-box timing-ease-in-out" id="timing-demo-5">
+                ease-in-out
+              </div>
             </div>
-            <div class="code-block">
-              transition: transform 0.6s ease-in-out;
-            </div>
+            <textarea class="code-editor" id="timing-css-5" rows="4">
+.timing-ease-in-out {
+  transition: transform 0.6s ease-in-out;
+}
+.timing-ease-in-out:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box timing-bounce">bounce</div>
+              <div class="demo-box timing-bounce" id="timing-demo-6">
+                bounce
+              </div>
             </div>
-            <div class="code-block">
-              transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            </div>
+            <textarea class="code-editor" id="timing-css-6" rows="4">
+.timing-bounce {
+  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.timing-bounce:hover {
+  transform: translateX(60px);
+}</textarea
+            >
           </div>
         </div>
 
         <h2>3. Property-Specific Transitions</h2>
-        <p>Different CSS properties create different visual effects:</p>
+        <p>
+          Edit the CSS below to experiment with different properties and
+          effects:
+        </p>
 
         <div class="comparison-grid">
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-transform">Transform</div>
+              <div class="demo-box prop-transform" id="prop-demo-1">
+                Transform
+              </div>
             </div>
-            <div class="code-block">
-              transition: transform 0.4s ease; /* Rotate + Scale */
-            </div>
+            <textarea class="code-editor" id="prop-css-1" rows="4">
+.prop-transform {
+  transition: transform 0.4s ease;
+}
+.prop-transform:hover {
+  transform: rotate(180deg) scale(1.2);
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-background">Background</div>
+              <div class="demo-box prop-background" id="prop-demo-2">
+                Background
+              </div>
             </div>
-            <div class="code-block">
-              transition: background-color 0.4s ease; /* Color change */
-            </div>
+            <textarea class="code-editor" id="prop-css-2" rows="4">
+.prop-background {
+  transition: background-color 0.4s ease;
+}
+.prop-background:hover {
+  background-color: #ef4444;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-opacity">Opacity</div>
+              <div class="demo-box prop-opacity" id="prop-demo-3">Opacity</div>
             </div>
-            <div class="code-block">
-              transition: opacity 0.4s ease; /* Fade effect */
-            </div>
+            <textarea class="code-editor" id="prop-css-3" rows="4">
+.prop-opacity {
+  transition: opacity 0.4s ease;
+}
+.prop-opacity:hover {
+  opacity: 0.3;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-width">Width</div>
+              <div class="demo-box prop-width" id="prop-demo-4">Width</div>
             </div>
-            <div class="code-block">
-              transition: width 0.4s ease; /* Size change */
-            </div>
+            <textarea class="code-editor" id="prop-css-4" rows="4">
+.prop-width {
+  transition: width 0.4s ease;
+  width: 80px;
+}
+.prop-width:hover {
+  width: 120px;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-border">Border</div>
+              <div class="demo-box prop-border" id="prop-demo-5">Border</div>
             </div>
-            <div class="code-block">
-              transition: border-radius 0.4s ease; /* Shape change */
-            </div>
+            <textarea class="code-editor" id="prop-css-5" rows="4">
+.prop-border {
+  transition: border-radius 0.4s ease;
+}
+.prop-border:hover {
+  border-radius: 50%;
+}</textarea
+            >
           </div>
           <div>
             <div class="demo-area">
-              <div class="demo-box prop-box-shadow">Shadow</div>
+              <div class="demo-box prop-box-shadow" id="prop-demo-6">
+                Shadow
+              </div>
             </div>
-            <div class="code-block">
-              transition: box-shadow 0.4s ease; /* Depth effect */
-            </div>
+            <textarea class="code-editor" id="prop-css-6" rows="4">
+.prop-box-shadow {
+  transition: box-shadow 0.4s ease;
+}
+.prop-box-shadow:hover {
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}</textarea
+            >
           </div>
         </div>
 
         <h2>4. Delay Examples</h2>
-        <p>See how different delays affect when animations start:</p>
+        <p>
+          Edit the CSS below to experiment with different delays and see when
+          animations start:
+        </p>
 
         <div class="comparison-grid">
           <div>
@@ -686,6 +857,46 @@
 
       // Initialize
       updateTransition();
+
+      // Editable CSS functionality
+      const codeEditors = [
+        "duration-css-1",
+        "duration-css-2",
+        "duration-css-3",
+        "duration-css-4",
+        "timing-css-1",
+        "timing-css-2",
+        "timing-css-3",
+        "timing-css-4",
+        "timing-css-5",
+        "timing-css-6",
+        "prop-css-1",
+        "prop-css-2",
+        "prop-css-3",
+        "prop-css-4",
+        "prop-css-5",
+        "prop-css-6",
+      ];
+
+      codeEditors.forEach((editorId) => {
+        const textarea = document.getElementById(editorId);
+        if (textarea) {
+          // Create a style element for this editor
+          const styleElement = document.createElement("style");
+          styleElement.id = `style-${editorId}`;
+          document.head.appendChild(styleElement);
+
+          function updateCSS() {
+            let cssContent = textarea.value;
+            // Ensure the CSS is scoped properly
+            styleElement.textContent = cssContent;
+          }
+
+          textarea.addEventListener("input", updateCSS);
+          // Initialize with default styles
+          updateCSS();
+        }
+      });
     </script>
   </body>
 </html>
